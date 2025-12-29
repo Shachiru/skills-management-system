@@ -1,22 +1,34 @@
+import "reflect-metadata";
 import dotenv from "dotenv";
 import express from "express";
 import type {Request, Response} from "express";
 import cors from "cors";
+import {initDB} from "./config/db.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Basic Route
 app.get('/', (req: Request, res: Response) => {
-    res.send('Skills Management System API is running...');
+    res.send('Personnel Skills Management System API is running...');
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await initDB();
+
+        app.listen(PORT, () => {
+            console.log(`🚀 Server is running on port ${PORT}`);
+            console.log(`🔗 Local: http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.error("❌ server cannot start", error);
+        process.exit(1);
+    }
+};
+
+startServer();
