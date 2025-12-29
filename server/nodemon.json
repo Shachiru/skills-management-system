@@ -1,0 +1,13 @@
+{
+  "watch": [
+    "src"
+  ],
+  "ext": "ts",
+  "ignore": [
+    "src/**/*.test.ts"
+  ],
+  "exec": "node --loader ts-node/esm --no-warnings=ExperimentalWarning",
+  "env": {
+    "NODE_OPTIONS": "--loader ts-node/esm --no-warnings=ExperimentalWarning"
+  }
+}
