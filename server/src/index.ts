@@ -4,6 +4,7 @@ import express from "express";
 import type {Request, Response} from "express";
 import cors from "cors";
 import {initDB} from "./config/db.js";
+import personnelRoutes from "./routes/personnel.routes.js";
 
 dotenv.config();
 
@@ -12,6 +13,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/personnel", personnelRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Personnel Skills Management System API is running...');
