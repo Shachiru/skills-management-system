@@ -1,7 +1,6 @@
 import type { Request, Response } from "express";
 import { Personnel } from "../models/Personnel.js";
 
-// Create Personnel
 export const createPersonnel = async (req: Request, res: Response) => {
     try {
         const person = await Personnel.create(req.body);
@@ -11,7 +10,6 @@ export const createPersonnel = async (req: Request, res: Response) => {
     }
 };
 
-// Get All Personnel
 export const getAllPersonnel = async (_req: Request, res: Response) => {
     try {
         const people = await Personnel.findAll();
@@ -21,7 +19,6 @@ export const getAllPersonnel = async (_req: Request, res: Response) => {
     }
 };
 
-// Update Personnel
 export const updatePersonnel = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -36,7 +33,6 @@ export const updatePersonnel = async (req: Request, res: Response) => {
     }
 };
 
-// Delete Personnel
 export const deletePersonnel = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
