@@ -6,16 +6,27 @@ import {Sequelize} from "sequelize-typescript";
 
 export const getDashboardStats = async (_req: Request, res: Response) => {
     try {
-        const stats = {
-            totalPersonnel: await Personnel.count(),
-            totalProjects: await Project.count(),
-            totalSkills: await Skill.count(),
-            projectStatus: await Project.findAll({
-                attributes: ['status', [Sequelize.fn('COUNT', Sequelize.col('status')), 'count']],
+        const [personnelCount, projectCount, skillCount, statusDistribution] = await Promise.all([
+            Personnel.count(),
+            Project.count(),
+            Skill.count(),
+            Project.findAll({
+                attributes: [
+                    'status',
+                    [Sequelize.fn('COUNT', Sequelize.col('status')), 'count']
+                ],
                 group: ['status']
             })
-        };
-        res.status(200).json(stats);
+        ]);
+
+        res.status(200).json({
+            summary: {
+                totalPersonnel: personnelCount,
+                totalProjects: projectCount,
+                totalSkills: skillCount
+            },
+            projectDistribution: statusDistribution
+        });
     } catch (error: any) {
         res.status(500).json({message: error.message});
     }
