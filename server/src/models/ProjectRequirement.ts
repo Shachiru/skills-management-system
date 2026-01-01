@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Project } from './Project.js';
 import { Skill } from './Skill.js';
 
@@ -17,4 +17,7 @@ export class ProjectRequirement extends Model {
         allowNull: false
     })
     minProficiency!: string;
+
+    @BelongsTo(() => Skill)
+    skill!: Skill;
 }

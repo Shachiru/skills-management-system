@@ -1,4 +1,5 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
+import { ProjectRequirement } from './ProjectRequirement.js';
 
 @Table({ tableName: 'projects', timestamps: true })
 export class Project extends Model {
@@ -19,4 +20,7 @@ export class Project extends Model {
         defaultValue: 'Planning'
     })
     status!: string;
+
+    @HasMany(() => ProjectRequirement)
+    requirements!: ProjectRequirement[];
 }
