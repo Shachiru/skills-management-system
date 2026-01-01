@@ -6,6 +6,7 @@ import cors from "cors";
 import {initDB} from "./config/db.js";
 import personnelRoutes from "./routes/personnel.routes.js";
 import skillRoutes from "./routes/skill.routes.js";
+import projectRoutes from "./routes/project.routes.js";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/personnel", personnelRoutes);
 app.use("/api/skills", skillRoutes);
+app.use("/api/projects", projectRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Personnel Skills Management System API is running...');
