@@ -59,6 +59,7 @@ export const getMatchesForProject = async (req: Request, res: Response) => {
         const requiredSkillIds = requirements.map(r => r.skillId);
 
         const candidates = await Personnel.findAll({
+            where: { isAvailable: true },
             include: [{
                 model: Skill,
                 where: {id: requiredSkillIds},
