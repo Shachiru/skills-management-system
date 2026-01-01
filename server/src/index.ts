@@ -8,6 +8,8 @@ import personnelRoutes from "./routes/personnel.routes.js";
 import skillRoutes from "./routes/skill.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import analyticsRoutes from "./routes/analytics.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import {protect} from "./middleware/auth.middleware.js";
 
 dotenv.config();
 
@@ -17,10 +19,14 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/personnel", personnelRoutes);
-app.use("/api/skills", skillRoutes);
-app.use("/api/projects", projectRoutes);
-app.use("/api/analytics", analyticsRoutes);
+// Public Routes
+app.use("/api/auth", authRoutes);
+
+// Protected Routes
+app.use("/api/personnel", protect, personnelRoutes);
+app.use("/api/skills", protect, skillRoutes);
+app.use("/api/projects", protect, projectRoutes);
+app.use("/api/analytics", protect, analyticsRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Personnel Skills Management System API is running...');

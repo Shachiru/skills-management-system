@@ -6,6 +6,7 @@ import { Skill } from '../models/Skill.js';
 import { PersonnelSkill } from '../models/PersonnelSkill.js';
 import { Project } from '../models/Project.js';
 import { ProjectRequirement } from '../models/ProjectRequirement.js';
+import {User} from "../models/User.js";
 
 dotenv.config();
 
@@ -21,7 +22,8 @@ const sequelize = new Sequelize({
         Skill,
         PersonnelSkill,
         Project,
-        ProjectRequirement
+        ProjectRequirement,
+        User
     ],
 });
 
