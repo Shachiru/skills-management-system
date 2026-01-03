@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
+import Personnel from "./pages/Personnel";
 
 function App() {
     return (
@@ -29,7 +30,7 @@ function App() {
                         </ProtectedRoute>
                     }>
                         <Route path="/dashboard" element={<Dashboard/>}/>
-                        <Route path="/personnel" element={<div><h1>Personnel List (Coming Soon)</h1></div>}/>
+                        <Route path="/personnel" element={<Personnel />}/>
                         <Route path="/skills" element={<div><h1>Skills Catalog (Coming Soon)</h1></div>}/>
                         <Route path="/projects" element={<div><h1>Project Matching (Coming Soon)</h1></div>}/>
                     </Route>
