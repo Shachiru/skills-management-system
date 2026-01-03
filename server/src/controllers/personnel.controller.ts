@@ -1,6 +1,7 @@
 import type {Request, Response} from "express";
 import {Personnel} from "../models/Personnel.js";
 import {Op} from "sequelize";
+import {PersonnelSkill} from "../models/PersonnelSkill.js";
 
 export const createPersonnel = async (req: Request, res: Response) => {
     try {
@@ -61,5 +62,26 @@ export const deletePersonnel = async (req: Request, res: Response) => {
         throw new Error('Personnel not found');
     } catch (error: any) {
         res.status(500).json({message: error.message});
+    }
+};
+
+export const addSkillToPersonnel = async (req: Request, res: Response) => {
+    try {
+        const {id} = req.params;
+        const {skillId, proficiencyLevel} = req.body;
+
+        const newRecord = await PersonnelSkill.create({
+            personnelId: Number(id),
+            skillId: Number(skillId),
+            proficiencyLevel: proficiencyLevel
+        });
+
+        return res.status(201).json({
+            message: "Skill assigned successfully!",
+            data: newRecord
+        });
+    } catch (error: any) {
+        console.error("Database Insert Error:", error);
+        return res.status(500).json({message: "Failed to save skill: " + error.message});
     }
 };
