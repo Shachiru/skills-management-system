@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Personnel from "./pages/Personnel";
+import ProjectMatching from "./pages/ProjectMatching";
 
 function App() {
     return (
@@ -30,9 +31,9 @@ function App() {
                         </ProtectedRoute>
                     }>
                         <Route path="/dashboard" element={<Dashboard/>}/>
-                        <Route path="/personnel" element={<Personnel />}/>
+                        <Route path="/personnel" element={<Personnel/>}/>
                         <Route path="/skills" element={<div><h1>Skills Catalog (Coming Soon)</h1></div>}/>
-                        <Route path="/projects" element={<div><h1>Project Matching (Coming Soon)</h1></div>}/>
+                        <Route path="/projects" element={<ProjectMatching/>}/>
                     </Route>
 
                     <Route path="*" element={<Navigate to="/login"/>}/>
