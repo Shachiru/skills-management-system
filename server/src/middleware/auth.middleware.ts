@@ -14,3 +14,6 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
         res.status(401).json({ message: "Token failed" });
     }
 };
+
+// Alias for consistency
+export const authenticate = protect;

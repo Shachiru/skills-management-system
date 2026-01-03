@@ -1,32 +1,56 @@
 import { useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { Mail, Lock, Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Mail, Lock, User, Loader2, ArrowRight, Eye, EyeOff, Building } from 'lucide-react';
 import api from '../api/axios.js';
 import { useAuth } from '../context/AuthContext';
 
-const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const Signup = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        organization: ''
+    });
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const location = useLocation();
     const { login } = useAuth();
 
-    const from = (location.state as any)?.from?.pathname || '/dashboard';
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
+        // Validate password match
+        if (formData.password !== formData.confirmPassword) {
+            setError('Passwords do not match');
+            setLoading(false);
+            return;
+        }
+
         try {
-            const response = await api.post('/auth/login', { email, password });
+            const response = await api.post('/auth/register', {
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+                organization: formData.organization
+            });
+
+            // Auto-login after successful signup
             login(response.data.token, response.data.role);
-            navigate(from, { replace: true });
+            navigate('/dashboard');
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+            setError(err.response?.data?.message || 'Signup failed. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -56,36 +80,31 @@ const Login = () => {
                     {/* Content */}
                     <div className="max-w-md">
                         <h1 className="text-4xl font-bold mb-6 leading-tight">
-                            Skills Management System
+                            Start managing your team's skills today
                         </h1>
                         <p className="text-lg text-gray-300 leading-relaxed">
-                            Streamline your workforce skills, match talent to projects, and drive organizational excellence with intelligent analytics.
+                            Join thousands of organizations using Hudson to optimize workforce management and project allocation.
                         </p>
 
-                        <div className="mt-12 space-y-4">
-                            <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                                    </svg>
+                        <div className="mt-12 space-y-6">
+                            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+                                <div className="flex items-center space-x-3 mb-3">
+                                    <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center">
+                                        <span className="text-white text-xl font-bold">✓</span>
+                                    </div>
+                                    <h3 className="font-semibold text-lg">Free Trial</h3>
                                 </div>
-                                <span className="text-gray-300">Track personnel skills and certifications</span>
+                                <p className="text-gray-300 text-sm">Start with a 30-day free trial, no credit card required</p>
                             </div>
-                            <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
-                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                                    </svg>
+
+                            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+                                <div className="flex items-center space-x-3 mb-3">
+                                    <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
+                                        <span className="text-white text-xl font-bold">∞</span>
+                                    </div>
+                                    <h3 className="font-semibold text-lg">Unlimited Users</h3>
                                 </div>
-                                <span className="text-gray-300">Smart project-talent matching</span>
-                            </div>
-                            <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </div>
-                                <span className="text-gray-300">Real-time analytics and insights</span>
+                                <p className="text-gray-300 text-sm">Add as many team members as you need</p>
                             </div>
                         </div>
                     </div>
@@ -97,7 +116,7 @@ const Login = () => {
                 </div>
             </div>
 
-            {/* Right Side - Login Form */}
+            {/* Right Side - Signup Form */}
             <div className="flex-1 flex items-center justify-center px-6 py-12 bg-gray-50">
                 <div className="w-full max-w-md">
                     {/* Mobile Logo */}
@@ -110,8 +129,8 @@ const Login = () => {
 
                     {/* Form Header */}
                     <div className="mb-8">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h2>
-                        <p className="text-gray-600">Please enter your credentials to sign in</p>
+                        <h2 className="text-3xl font-bold text-gray-900 mb-2">Create your account</h2>
+                        <p className="text-gray-600">Start your free trial today</p>
                     </div>
 
                     {/* Error Message */}
@@ -121,8 +140,28 @@ const Login = () => {
                         </div>
                     )}
 
-                    {/* Login Form */}
-                    <form onSubmit={handleLogin} className="space-y-5">
+                    {/* Signup Form */}
+                    <form onSubmit={handleSignup} className="space-y-5">
+                        {/* Name Field */}
+                        <div>
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                                Full name
+                            </label>
+                            <div className="relative">
+                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    required
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
+                                    placeholder="John Doe"
+                                />
+                            </div>
+                        </div>
+
                         {/* Email Field */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
@@ -132,12 +171,33 @@ const Login = () => {
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <input
                                     id="email"
+                                    name="email"
                                     type="email"
                                     required
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={formData.email}
+                                    onChange={handleChange}
                                     className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
-                                    placeholder="admin@example.com"
+                                    placeholder="john@example.com"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Organization Field */}
+                        <div>
+                            <label htmlFor="organization" className="block text-sm font-medium text-gray-700 mb-2">
+                                Organization
+                            </label>
+                            <div className="relative">
+                                <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    id="organization"
+                                    name="organization"
+                                    type="text"
+                                    required
+                                    value={formData.organization}
+                                    onChange={handleChange}
+                                    className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
+                                    placeholder="Sianne LLC"
                                 />
                             </div>
                         </div>
@@ -151,10 +211,11 @@ const Login = () => {
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <input
                                     id="password"
+                                    name="password"
                                     type={showPassword ? 'text' : 'password'}
                                     required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    value={formData.password}
+                                    onChange={handleChange}
                                     className="w-full pl-10 pr-12 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
                                     placeholder="••••••••"
                                 />
@@ -168,15 +229,50 @@ const Login = () => {
                             </div>
                         </div>
 
-                        {/* Remember Me & Forgot Password */}
-                        <div className="flex items-center justify-between">
-                            <label className="flex items-center">
-                                <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900" />
-                                <span className="ml-2 text-sm text-gray-600">Remember me</span>
+                        {/* Confirm Password Field */}
+                        <div>
+                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                                Confirm password
                             </label>
-                            <button type="button" className="text-sm font-medium text-gray-900 hover:text-gray-700 transition">
-                                Forgot password?
-                            </button>
+                            <div className="relative">
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    required
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    className="w-full pl-10 pr-12 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition"
+                                    placeholder="••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                                >
+                                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Terms & Conditions */}
+                        <div className="flex items-start">
+                            <input
+                                type="checkbox"
+                                required
+                                className="w-4 h-4 mt-1 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                            />
+                            <label className="ml-2 text-sm text-gray-600">
+                                I agree to the{' '}
+                                <button type="button" className="font-medium text-gray-900 hover:text-gray-700 transition">
+                                    Terms of Service
+                                </button>
+                                {' '}and{' '}
+                                <button type="button" className="font-medium text-gray-900 hover:text-gray-700 transition">
+                                    Privacy Policy
+                                </button>
+                            </label>
                         </div>
 
                         {/* Submit Button */}
@@ -189,19 +285,19 @@ const Login = () => {
                                 <Loader2 className="animate-spin w-5 h-5" />
                             ) : (
                                 <>
-                                    <span>Sign in</span>
+                                    <span>Create account</span>
                                     <ArrowRight className="w-5 h-5" />
                                 </>
                             )}
                         </button>
                     </form>
 
-                    {/* Sign Up Link */}
+                    {/* Sign In Link */}
                     <div className="mt-8 text-center">
                         <p className="text-sm text-gray-600">
-                            Don't have an account?{' '}
-                            <Link to="/signup" className="font-semibold text-gray-900 hover:text-gray-700 transition">
-                                Sign up for free
+                            Already have an account?{' '}
+                            <Link to="/login" className="font-semibold text-gray-900 hover:text-gray-700 transition">
+                                Sign in
                             </Link>
                         </p>
                     </div>
@@ -212,11 +308,11 @@ const Login = () => {
                             <div className="w-full border-t border-gray-200"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-4 bg-gray-50 text-gray-500">Or continue with</span>
+                            <span className="px-4 bg-gray-50 text-gray-500">Or sign up with</span>
                         </div>
                     </div>
 
-                    {/* Social Login */}
+                    {/* Social Signup */}
                     <div className="mt-6 grid grid-cols-2 gap-3">
                         <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-white transition">
                             <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -240,4 +336,5 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Signup;
+

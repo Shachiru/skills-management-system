@@ -26,10 +26,36 @@ export const login = async (req: Request, res: Response) => {
         const token = jwt.sign(
             { id: user.id, role: user.role },
             process.env.JWT_SECRET as string,
-            { expiresIn: '1d' } // දින 1කින් token එක expire වේ
+            { expiresIn: '1d' }
         );
 
         res.status(200).json({ token, role: user.role });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const verify = async (req: Request, res: Response) => {
+    try {
+        // The auth middleware has already verified the token
+        // and attached the user to req.user
+        const userId = (req as any).user?.id;
+
+        if (!userId) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(401).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            email: user.email,
+            role: user.role,
+            id: user.id
+        });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
