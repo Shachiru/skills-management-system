@@ -7,7 +7,7 @@ import {
     Search,
     ChevronDown,
     BarChart3,
-    Library,
+    Award,
     Settings,
     HelpCircle,
     LogOut
@@ -28,7 +28,7 @@ const Layout = () => {
         { name: 'Projects', path: '/projects', icon: Briefcase },
         { name: 'Analytics', path: '/analytics', icon: BarChart3 },
         { name: 'Personnel', path: '/personnel', icon: Users },
-        { name: 'Library', path: '/skills', icon: Library },
+        { name: 'Skills', path: '/skills', icon: Award },
         { name: 'Settings', path: '/settings', icon: Settings },
     ];
 
@@ -39,19 +39,11 @@ const Layout = () => {
                 {/* Logo */}
                 <div className="px-6 py-5 border-b border-gray-800">
                     <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                            <span className="text-gray-900 font-bold text-sm">H</span>
+                        <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">SM</span>
                         </div>
-                        <span className="text-lg font-semibold">Hudson</span>
+                        <span className="text-lg font-semibold">Skills Manager</span>
                     </div>
-                </div>
-
-                {/* Overview Dropdown */}
-                <div className="px-4 py-4 border-b border-gray-800">
-                    <button className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-white hover:bg-gray-800 rounded-lg transition">
-                        <span>Overview</span>
-                        <ChevronDown className="w-4 h-4" />
-                    </button>
                 </div>
 
                 {/* Navigation */}
@@ -127,7 +119,7 @@ const Layout = () => {
                             {/* User Menu */}
                             <button className="flex items-center space-x-3 pl-3 pr-2 py-1.5 hover:bg-gray-50 rounded-lg transition">
                                 <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
-                                    TJ
+                                    {username.substring(0, 2).toUpperCase()}
                                 </div>
                                 <span className="text-sm font-medium text-gray-700">{username}</span>
                                 <ChevronDown className="w-4 h-4 text-gray-400" />

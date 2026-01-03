@@ -8,6 +8,9 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Personnel from "./pages/Personnel";
 import ProjectMatching from "./pages/ProjectMatching";
+import Skills from "./pages/Skills";
+import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
 
 function App() {
     return (
@@ -32,8 +35,10 @@ function App() {
                     }>
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/personnel" element={<Personnel/>}/>
-                        <Route path="/skills" element={<div><h1>Skills Catalog (Coming Soon)</h1></div>}/>
+                        <Route path="/skills" element={<Skills />} />
                         <Route path="/projects" element={<ProjectMatching/>}/>
+                        <Route path="/analytics" element={<Analytics/>}/>
+                        <Route path="/settings" element={<Settings/>}/>
                     </Route>
 
                     <Route path="*" element={<Navigate to="/login"/>}/>
