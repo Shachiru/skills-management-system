@@ -11,6 +11,7 @@ import ProjectMatching from "./pages/ProjectMatching";
 import Skills from "./pages/Skills";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
+import Projects from "./pages/Projects";
 
 function App() {
     return (
@@ -36,7 +37,8 @@ function App() {
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/personnel" element={<Personnel/>}/>
                         <Route path="/skills" element={<Skills />} />
-                        <Route path="/projects" element={<ProjectMatching/>}/>
+                        <Route path="/projects" element={<Projects />} />
+                        <Route path="/project-matching" element={<ProjectMatching/>}/>
                         <Route path="/analytics" element={<Analytics/>}/>
                         <Route path="/settings" element={<Settings/>}/>
                     </Route>

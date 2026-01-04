@@ -6,11 +6,12 @@ import {
     Bell,
     Search,
     ChevronDown,
+    HelpCircle,
+    LogOut,
     BarChart3,
     Award,
-    Settings,
-    HelpCircle,
-    LogOut
+    GitBranch,
+    Settings
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -20,16 +21,17 @@ const Layout = () => {
     const username = user?.email?.split('@')[0] || 'User';
 
     const handleLogout = () => {
-        logout(); // This will handle everything: clear storage and redirect to login
+        logout();
     };
 
     const menuItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-        { name: 'Projects', path: '/projects', icon: Briefcase },
-        { name: 'Analytics', path: '/analytics', icon: BarChart3 },
         { name: 'Personnel', path: '/personnel', icon: Users },
         { name: 'Skills', path: '/skills', icon: Award },
-        { name: 'Settings', path: '/settings', icon: Settings },
+        { name: 'Projects', path: '/projects', icon: Briefcase },
+        { name: 'Project Matching', path: '/project-matching', icon: GitBranch },
+        { name: 'Analytics', path: '/analytics', icon: BarChart3 },
+        { name: 'Settings', path: '/settings', icon: Settings as any },
     ];
 
     return (

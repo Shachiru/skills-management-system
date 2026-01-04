@@ -9,10 +9,18 @@ export const createProjectSchema = z.object({
     endDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
         message: "Invalid end date",
     }),
+    status: z.enum(['Planning', 'Active', 'Completed']).optional(),
     requirements: z.array(
         z.object({
             skillId: z.number(),
             minProficiency: z.enum(['Beginner', 'Intermediate', 'Advanced', 'Expert']),
         })
-    ).min(1, "At least one skill requirement is needed")
+    ).optional()
+}).refine((data) => {
+    const start = new Date(data.startDate);
+    const end = new Date(data.endDate);
+    return end > start;
+}, {
+    message: "End date must be after start date",
+    path: ["endDate"]
 });

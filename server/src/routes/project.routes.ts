@@ -12,4 +12,10 @@ router.get("/", ctrl.getAllProjects);
 
 router.get("/:id/matches", ctrl.getMatchesForProject);
 
+router.delete("/:id", authenticateToken, ctrl.deleteProject);
+
+router.post("/:id/requirements", ctrl.addProjectRequirement);
+
+router.delete("/:id/requirements/:reqId", authenticateToken, ctrl.deleteProjectRequirement);
+
 export default router;
