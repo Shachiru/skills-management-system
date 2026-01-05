@@ -10,6 +10,14 @@ interface CreateSkillRequest extends Request {
     };
 }
 
+interface UpdateSkillRequest extends Request {
+    body: {
+        name?: string;
+        category?: string;
+        description?: string;
+    };
+}
+
 interface AssignSkillRequest extends Request {
     body: {
         personnelId: number;
@@ -47,6 +55,22 @@ export const deleteSkill = async (req: Request, res: Response) => {
 
         await skill.destroy();
         res.status(200).json({ message: "Skill deleted successfully" });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const updateSkill = async (req: UpdateSkillRequest, res: Response) => {
+    try {
+        const { id } = req.params;
+        const skill = await Skill.findByPk(id);
+
+        if (!skill) {
+            return res.status(404).json({ message: "Skill not found" });
+        }
+
+        await skill.update(req.body);
+        res.status(200).json(skill);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

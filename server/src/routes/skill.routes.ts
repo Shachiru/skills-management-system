@@ -7,6 +7,7 @@ const router = Router();
 
 router.post("/", validate(skillSchema), ctrl.createSkill);
 router.get("/", ctrl.getAllSkills);
+router.put("/:id", validate(skillSchema), ctrl.updateSkill);
 router.delete("/:id", ctrl.deleteSkill);
 router.post("/assign", validate(assignSkillSchema), ctrl.assignSkillToPersonnel);
 
