@@ -28,12 +28,6 @@ export class Personnel extends Model {
     })
     experienceLevel!: string;
 
-    @Column({
-        type: DataType.INTEGER,
-        allowNull: false,
-        defaultValue: 0
-    })
-    yearsOfExperience!: number;
 
     @Column({
         type: DataType.BOOLEAN,

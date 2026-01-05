@@ -5,7 +5,16 @@ import {PersonnelSkill} from "../models/PersonnelSkill.js";
 
 export const createPersonnel = async (req: Request, res: Response) => {
     try {
-        const person = await Personnel.create(req.body);
+        const { firstName, lastName, experienceLevel, ...rest } = req.body;
+
+        // Combine firstName and lastName into name
+        const name = `${firstName} ${lastName}`;
+
+        const person = await Personnel.create({
+            name,
+            experienceLevel,
+            ...rest
+        });
         res.status(201).json(person);
     } catch (error: any) {
         res.status(500).json({message: error.message});
@@ -14,25 +23,31 @@ export const createPersonnel = async (req: Request, res: Response) => {
 
 export const getAllPersonnel = async (req: Request, res: Response) => {
     try {
-        const {role, minExp, maxExp} = req.query;
+        const {role} = req.query;
         let whereClause: any = {};
 
         if (role) {
             whereClause.role = {[Op.like]: `%${role}%`};
         }
 
-        if (minExp || maxExp) {
-            whereClause.yearsOfExperience = {};
-            if (minExp) whereClause.yearsOfExperience[Op.gte] = Number(minExp);
-            if (maxExp) whereClause.yearsOfExperience[Op.lte] = Number(maxExp);
-        }
 
         const people = await Personnel.findAll({
             where: whereClause,
             include: ['skills']
         });
 
-        res.status(200).json(people);
+        // Transform data to include firstName and lastName for frontend
+        const transformedPeople = people.map(person => {
+            const personData = person.toJSON();
+            const nameParts = personData.name.split(' ');
+            return {
+                ...personData,
+                firstName: nameParts[0] || '',
+                lastName: nameParts.slice(1).join(' ') || ''
+            };
+        });
+
+        res.status(200).json(transformedPeople);
     } catch (error: any) {
         res.status(500).json({message: error.message});
     }
@@ -41,10 +56,28 @@ export const getAllPersonnel = async (req: Request, res: Response) => {
 export const updatePersonnel = async (req: Request, res: Response) => {
     try {
         const {id} = req.params;
-        const [updated] = await Personnel.update(req.body, {where: {id}});
+        const { firstName, lastName, experienceLevel, ...rest } = req.body;
+
+        // Combine firstName and lastName into name
+        const name = `${firstName} ${lastName}`;
+
+        const [updated] = await Personnel.update({
+            name,
+            experienceLevel,
+            ...rest
+        }, {where: {id}});
+
         if (updated) {
             const updatedPerson = await Personnel.findByPk(id);
-            return res.status(200).json(updatedPerson);
+            if (updatedPerson) {
+                const personData = updatedPerson.toJSON();
+                const nameParts = personData.name.split(' ');
+                return res.status(200).json({
+                    ...personData,
+                    firstName: nameParts[0] || '',
+                    lastName: nameParts.slice(1).join(' ') || ''
+                });
+            }
         }
         throw new Error('Personnel not found');
     } catch (error: any) {
