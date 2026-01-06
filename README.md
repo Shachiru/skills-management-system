@@ -918,7 +918,7 @@ This project is licensed under the ISC License - see the LICENSE file for detail
 
 ## 📞 Support
 
-For support, email support@example.com or open an issue in the repository.
+For support, email shachirurashmika35@gmail.com or open an issue in the repository.
 
 ## 📚 Additional Resources
 
